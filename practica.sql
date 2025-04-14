@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3307
--- Tiempo de generación: 14-04-2025 a las 03:16:18
+-- Tiempo de generación: 14-04-2025 a las 03:35:07
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -41,7 +41,6 @@ CREATE TABLE `carrito` (
 CREATE TABLE `carrito_producto` (
   `ID` int(11) NOT NULL,
   `Carrito` int(11) NOT NULL,
-  `Usuario` int(11) NOT NULL,
   `Producto` int(11) NOT NULL,
   `Cantidad` int(11) NOT NULL,
   `Precio` decimal(10,0) NOT NULL
@@ -102,7 +101,6 @@ ALTER TABLE `carrito`
 ALTER TABLE `carrito_producto`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `Carrito` (`Carrito`),
-  ADD KEY `Usuario` (`Usuario`),
   ADD KEY `Producto` (`Producto`);
 
 --
@@ -160,7 +158,6 @@ ALTER TABLE `carrito`
 --
 ALTER TABLE `carrito_producto`
   ADD CONSTRAINT `carrito_producto_ibfk_1` FOREIGN KEY (`Carrito`) REFERENCES `carrito` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `carrito_producto_ibfk_2` FOREIGN KEY (`Usuario`) REFERENCES `usuario` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `carrito_producto_ibfk_3` FOREIGN KEY (`Producto`) REFERENCES `producto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
