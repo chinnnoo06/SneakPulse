@@ -1,0 +1,145 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-image: url('/assets/fondo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contenedor {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px; /* Espacio para pantallas muy pequeñas */
+  box-sizing: border-box;
+}
+
+.contenedor-form {
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #222;
+  width: 100%;
+  max-width: 700px; /* más ancho para 3 columnas */
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.35s ease-in-out;
+  box-sizing: border-box;
+}
+
+.contenedor-form:hover {
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.25),
+    0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.titulo-form h2 {
+  font-weight: 600;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: block;
+  font-size: 1rem;
+  color: #333;
+  letter-spacing: 0.02em;
+}
+
+input[type='text'],
+input[type='password'],
+input[type='email'],
+select {
+  width: 100%;
+  padding: 8px 7px;
+  font-size: 0.9rem;
+  border: 1.6px solid #ccc;
+  border-radius: 10px;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  outline: none;
+  box-shadow: inset 0 2px 4px rgb(0 0 0 / 0.06);
+  box-sizing: border-box;
+}
+
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='email']:focus,
+select:focus {
+  border-color: #a54242;
+  box-shadow: 0 0 12px rgba(165, 66, 66, 0.45);
+}
+
+.btn-tipouno {
+  background-color: #202123;
+  color: white;
+  font-weight: 600;
+  width: 180px;
+  box-shadow: 0 4px 14px rgb(32 33 35 / 0.35);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+.btn-tipouno:hover:not(:disabled) {
+  background-color: #a54242;
+  color: white;
+  box-shadow: 0 6px 22px rgb(165 66 66 / 0.6);
+  transform: scale(1.03);
+}
+
+.btn-tipouno:disabled {
+  background-color: #a7a7a7;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-tipodos {
+  background-color: #a54242;
+  color: white;
+  font-weight: 600;
+  width: 180px;
+  box-shadow: 0 3px 12px rgb(165 66 66 / 0.45);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+.btn-tipodos:hover {
+  background-color: #202123;
+  color: white;
+  box-shadow: 0 5px 18px rgb(32 33 35 / 0.55);
+  transform: scale(1.05);
+}
+
+.text-center h3 {
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+  color: #202123;
+}
+
+.text-center p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.01em;
+}
+
+.forgot-password-link {
+  display: block;
+  text-align: right;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  color: #a54242;
+  text-decoration: underline;
+  cursor: pointer;
+  user-select: none;
+}
+
+.forgot-password-link:hover {
+  color: #7a2f2f;
+}

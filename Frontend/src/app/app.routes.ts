@@ -1,9 +1,15 @@
 import { Routes } from '@angular/router';
-import { ProductoComponent } from './components/producto/producto.component';
-
+import { LoginComponent } from './components/login-crearcuenta/login.component';
+import { CrearCuentaComponent } from './components/login-crearcuenta/crearcuenta.component';
+import { CatalogoComponent } from './components/catalogo/catalogo.component';
+import { InventarioComponent } from './components/inventario/inventario.component';
+import { RecuperarComponent } from './components/login-crearcuenta/recuperar.component';
 
 export const routes: Routes = [
-  { path: 'productos', component: ProductoComponent },
-  { path: '', redirectTo: '/productos', pathMatch: 'full' }, // Redirigir a productos por defecto
-  { path: '**', redirectTo: '/productos' } // Redirigir cualquier ruta no encontrada a productos
+  { path: '', component: LoginComponent },
+  { path: 'iniciarsesion', component: LoginComponent },
+  { path: 'crearcuenta', component: CrearCuentaComponent },
+  { path: 'recuperar', component: RecuperarComponent },
+  { path: 'inicio-cliente', component: CatalogoComponent },
+  { path: 'inicio-admin', component: InventarioComponent }
 ];
