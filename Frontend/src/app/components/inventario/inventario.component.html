@@ -1,3 +1,53 @@
-<div class="container mt-4">
-  <h1>Hola Admin</h1>
+<div class="contenedor container-fluid py-4">
+  <!-- Barra de búsqueda -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="search-bar rounded">
+        <div class="input-group">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Buscar productos..." 
+            aria-label="Buscar productos"
+            [(ngModel)]="terminoBusqueda"
+            (input)="filtrarProductos()"
+          >
+          <button class="btn btn-search" type="button">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Título -->
+  <div class="row mb-4">
+    <div class="col-12 text-center">
+      <h1 class="fw-bold text-dark mb-2">Sneakers<span class="text-danger">Pulse</span></h1>
+      <p class="text-muted">Catálogo de productos exclusivos</p>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay resultados -->
+  <div *ngIf="productosFiltrados.length === 0" class="alert alert-info text-center">
+    No se encontraron productos que coincidan con "{{terminoBusqueda}}"
+  </div>
+
+  <!-- Productos -->
+  <div class="row g-3 g-md-4">
+    <div *ngFor="let producto of productosFiltrados" class="col-6 col-md-4 col-lg-3">
+      <div class="card product-card h-100 border-0 shadow-sm">
+        <div class="badge bg-dark position-absolute m-2">Nuevo</div>
+        <img [src]="producto.Imagen_URL" class="card-img-top p-3" alt="{{producto.Nombre}}">
+        <div class="card-body pt-0 pb-3 px-3 d-flex flex-column">
+          <div class="mb-3">
+            <h6 class="card-title fw-bold mb-1">{{producto.Nombre}}</h6>
+            <small class="text-muted d-block mb-1">Disponible</small>
+            <h5 class="text-dark mb-0">${{producto.Precio}}</h5>
+          </div>
+          <button class="btn btn-sm btn-tipouno w-100 mt-auto" (click)="verDetalles(producto)">Ver detalles</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

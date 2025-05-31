@@ -1,0 +1,96 @@
+<div class="contenedor py-4">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 py-3">
+      <h2 class="mb-0 fw-semibold text-dark">Detalles del Producto</h2>
+    </div>
+    
+    <div class="card-body" *ngIf="producto">
+      <!-- Sección de información del producto - Mejorada -->
+      <div class="product-display">
+        <div class="product-image-wrapper">
+          <img [src]="producto.Imagen_URL" 
+               alt="{{producto.Nombre}}" 
+               class="product-image">
+        </div>
+        
+        <div class="product-details">
+          <div class="detail-item">
+            <h3 class="detail-label">Nombre</h3>
+            <p class="detail-value">{{producto.Nombre}}</p>
+          </div>
+          
+          <div class="detail-item">
+            <h3 class="detail-label">Precio</h3>
+            <p class="detail-value price">${{producto.Precio | number:'1.2-2'}}</p>
+          </div>
+          
+          <div class="detail-item">
+            <h3 class="detail-label">Color</h3>
+            <div class="color-display">
+              <span class="color-value">{{producto.Color}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de gestión de inventario -->
+      <div class="inventory-section">
+        <h3 class="section-title">
+          <i class="fas fa-boxes me-2"></i>Gestión de Inventario
+        </h3>
+        
+        <!-- Estados de carga -->
+        <div *ngIf="loading" class="status-message info">
+          <i class="fas fa-spinner fa-spin me-3"></i>
+          <span>Cargando tallas disponibles...</span>
+        </div>
+        
+        <div *ngIf="error" class="status-message error">
+          <i class="fas fa-exclamation-triangle me-3"></i>
+          <span>{{error}}</span>
+        </div>
+        
+        <!-- Tabla de tallas -->
+        <div *ngIf="tallas.length > 0 && !loading" class="inventory-table">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Talla</th>
+                  <th class="text-center">Stock</th>
+                  <th class="text-end">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let talla of tallas">
+                  <td>
+                    <span class="size-badge">{{talla.Nombre}}</span>
+                  </td>
+                  <td class="text-center">
+                    <span class="stock-badge">{{talla.Cantidad}}</span>
+                  </td>
+                  <td class="text-end">
+                    <div class="action-buttons">
+                      <button class="btn btn-tipouno" (click)="disminuirCantidad(talla)">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button class="btn btn-tipodos" (click)="aumentarCantidad(talla)">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Mensaje cuando no hay tallas -->
+        <div *ngIf="tallas.length === 0 && !loading && !error" class="status-message warning">
+          <i class="fas fa-info-circle me-3"></i>
+          <span>No hay tallas disponibles para este producto</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

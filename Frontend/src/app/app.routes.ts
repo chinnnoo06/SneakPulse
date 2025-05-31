@@ -4,6 +4,7 @@ import { CrearCuentaComponent } from './components/login-crearcuenta/crearcuenta
 import { CatalogoComponent } from './components/catalogo/catalogo.component';
 import { InventarioComponent } from './components/inventario/inventario.component';
 import { RecuperarComponent } from './components/login-crearcuenta/recuperar.component';
+import { DetallesproductoAdminComponent } from './components/detalle-producto/detalleproductoadmin.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -11,5 +12,6 @@ export const routes: Routes = [
   { path: 'crearcuenta', component: CrearCuentaComponent },
   { path: 'recuperar', component: RecuperarComponent },
   { path: 'inicio-cliente', component: CatalogoComponent },
-  { path: 'inicio-admin', component: InventarioComponent }
+  { path: 'inicio-admin', component: InventarioComponent },
+  { path: 'detallesproducto-admin/:id', component: DetallesproductoAdminComponent }
 ];

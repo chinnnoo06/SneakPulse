@@ -15,6 +15,8 @@ const crearCuentaModel = require('./Models/crearcuenta');
 const iniciarSesionModel = require('./Models/iniciarsesion');
 const obtenerDatosRecuperarModel = require('./Models/obtenerdatosrecuperar');
 const cambiarContrasenia = require('./Models/cambiarcontrasenia');
+const detalleProducto = require('./Models/detallesProducto');
+const cambiarStock = require('./Models/cambiarStock')
 
 // Crear un endpoint para obtener los productos
 app.get('/api/productos', (req, res) => {
@@ -259,6 +261,51 @@ app.post('/api/cambiarcontrasenia', (req, res) => {
             message: 'Contraseña cambiada exitosamente'
         });
     });
+});
+
+// Endpoint para obtener tallas
+app.get('/api/tallas-producto/:productoId', (req, res) => {
+  const productoId = req.params.productoId;
+  
+  detalleProducto.obtenerTallasPorProducto(productoId, (err, tallas) => {
+    if (err) {
+      return res.status(500).json({ 
+        success: false,
+        message: 'Error al obtener tallas del producto',
+        error: err.message
+      });
+    }
+    
+    res.json(tallas);
+  });
+});
+
+// Agrega esto con los otros endpoints en server.js
+app.put('/api/actualizar-stock', (req, res) => {
+  console.log('Solicitud de actualización de stock recibida');
+  const { tallaProductoId, nuevaCantidad } = req.body;
+
+  if (!tallaProductoId || nuevaCantidad === undefined) {
+    return res.status(400).json({
+      success: false,
+      message: 'ID de talla_producto y nueva cantidad son requeridos'
+    });
+  }
+
+  cambiarStock.actualizarStock(tallaProductoId, nuevaCantidad, (err, resultado) => {
+    if (err) {
+      console.error('Error al actualizar stock:', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al actualizar stock'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Stock actualizado exitosamente'
+    });
+  });
 });
 
 // Iniciar el servidor Express

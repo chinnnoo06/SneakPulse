@@ -1,0 +1,278 @@
+/* Estilos generales */
+.contenedor {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: none;
+}
+
+.card-header {
+  background: #fff;
+  padding: 20px 25px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.card-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* Sección de producto mejorada */
+.product-display {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.product-image-wrapper {
+  flex: 1;
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image {
+  max-height: 350px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.product-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.detail-item {
+  margin-bottom: 25px;
+}
+
+.detail-label {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.detail-value {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 500;
+  margin: 0;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #a54242;
+}
+
+.color-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-value {
+  padding: 6px 12px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* Sección de inventario */
+.inventory-section {
+  margin-top: 40px;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.section-title i {
+  color: #a54242;
+}
+
+/* Tabla de inventario */
+.inventory-table {
+  border: 1px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  padding: 15px 20px;
+}
+
+.table tbody td {
+  padding: 15px 20px;
+  vertical-align: middle;
+}
+
+.size-badge {
+  display: inline-block;
+  padding: 8px 15px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+.stock-badge {
+  display: inline-block;
+  padding: 8px 15px;
+  background-color: #a54242;
+  color: white;
+  border-radius: 6px;
+  font-weight: 600;
+  min-width: 50px;
+  text-align: center;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-decrease, .btn-increase {
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.btn-decrease {
+  background-color: #fff;
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-decrease:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-increase {
+  background-color: #fff;
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-increase:hover {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Mensajes de estado */
+.status-message {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.status-message i {
+  font-size: 1.1rem;
+}
+
+.info {
+  background-color: #e7f4ff;
+  color: #0066cc;
+}
+
+.error {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.warning {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+
+.btn-tipouno {
+  background-color: #202123;
+  color: white;
+  font-weight: 600;
+  font-size: 0.8rem;
+  box-shadow: 0 4px 14px rgb(32 33 35 / 0.35);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+.btn-tipouno:hover,
+.btn-tipodos:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); 
+}
+
+.btn-tipodos {
+  background-color: #a54242;
+  color: white;
+  font-weight: 600;
+  font-size: 0.8rem;
+  box-shadow: 0 3px 12px rgb(165 66 66 / 0.45);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-display {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .product-image-wrapper {
+    padding: 15px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .btn-decrease, .btn-increase {
+    width: 100%;
+  }
+  
+  .table thead th, 
+  .table tbody td {
+    padding: 12px 15px;
+  }
+}
