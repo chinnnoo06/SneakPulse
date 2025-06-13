@@ -9,14 +9,128 @@ app.use(express.json()); // Para parsear JSON
 app.use(cors()); // Habilitar CORS
 
 const productoModel = require('./Models/productoModel');  // Importar el modelo de productos
-const pedidoModel = require('./Models/pedidoModel');  // Importar el modelo de pedido
 const detallePedidoModel = require('./Models/detallePedidoModel');  // Importar el modelo de detalles del pedido
 const crearCuentaModel = require('./Models/crearcuenta');
 const iniciarSesionModel = require('./Models/iniciarsesion');
 const obtenerDatosRecuperarModel = require('./Models/obtenerdatosrecuperar');
 const cambiarContrasenia = require('./Models/cambiarcontrasenia');
 const detalleProducto = require('./Models/detallesProducto');
-const cambiarStock = require('./Models/cambiarStock')
+const cambiarStock = require('./Models/cambiarStock');
+const db = require('./db');
+const obtenerCarrito = require('./Models/obtenerCarrito');
+const obtenerPerfil = require('./Models/obtenerPerfil')
+
+// Endpoint para verificar si el usuario tiene items en el carrito
+app.get('/api/verificar-carrito/:usuarioId', (req, res) => {
+  const usuarioId = req.params.usuarioId;
+  
+  if (!usuarioId || isNaN(usuarioId)) {
+    return res.status(400).json({
+      success: false,
+      message: 'ID de usuario inválido'
+    });
+  }
+
+  const query = `
+    SELECT COUNT(dp.ID) AS items_count
+    FROM pedido p
+    LEFT JOIN detalles_pedido dp ON p.ID = dp.Pedido_ID
+    WHERE p.Usuario_ID = ?
+    GROUP BY p.ID
+  `;
+  
+  db.query(query, [usuarioId], (err, resultados) => {
+    if (err) {
+      console.error('Error al verificar carrito:', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al verificar el carrito'
+      });
+    }
+    
+    // Si hay resultados y items_count > 0, hay productos en el carrito
+    const tieneItems = resultados.length > 0 && resultados[0].items_count > 0;
+    res.json(tieneItems);
+  });
+});
+
+// Obtener perfil de usuario
+app.get('/api/obtener-perfil/:usuarioId', (req, res) => {
+  const usuarioId = parseInt(req.params.usuarioId);
+  
+  if (isNaN(usuarioId)) {
+    return res.status(400).json({
+      success: false,
+      message: 'ID de usuario inválido'
+    });
+  }
+
+  obtenerPerfil.obtenerPerfilUsuario(usuarioId, (err, perfil) => {
+    if (err) {
+      console.error('Error al obtener perfil:', err);
+      return res.status(500).json({
+        success: false,
+        message: err.message || 'Error al obtener perfil'
+      });
+    }
+    
+    res.json({
+      success: true,
+      data: perfil
+    });
+  });
+});
+
+// Actualizar perfil de usuario
+app.put('/api/obtener-perfil/:usuarioId', (req, res) => {
+  const usuarioId = parseInt(req.params.usuarioId);
+  
+  if (isNaN(usuarioId)) {
+    return res.status(400).json({
+      success: false,
+      message: 'ID de usuario inválido'
+    });
+  }
+
+  const datosActualizados = req.body;
+  
+  obtenerPerfil.actualizarPerfilUsuario(usuarioId, datosActualizados, (err, resultado) => {
+    if (err) {
+      console.error('Error al actualizar perfil:', err);
+      return res.status(500).json({
+        success: false,
+        message: err.message || 'Error al actualizar perfil'
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Perfil actualizado correctamente',
+      data: resultado
+    });
+  });
+});
+
+// Actualizar perfil de usuario
+app.put('/api/obtener-perfil/:usuarioId', (req, res) => {
+  const usuarioId = req.params.usuarioId;
+  const datosActualizados = req.body;
+  
+  obtenerPerfil.actualizarPerfilUsuario(usuarioId, datosActualizados, (err, resultado) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: 'Error al actualizar perfil',
+        error: err.message
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Perfil actualizado correctamente'
+    });
+  });
+});
 
 // Crear un endpoint para obtener los productos
 app.get('/api/productos', (req, res) => {
@@ -29,34 +143,51 @@ app.get('/api/productos', (req, res) => {
   });
 });
 
-// Crear un endpoint para agregar un pedido
-app.post('/api/crear-pedido', (req, res) => {
-  console.log('Datos recibidos:', req.body);
-  const { total, usuario_id } = req.body;
-
-  // Validación básica
-  if (!total || !usuario_id) {
-    return res.status(400).send({ 
-      message: 'Datos incompletos', 
-      required: ['total', 'usuario_id'] 
-    });
-  }
-
-  pedidoModel.crearPedido(total, usuario_id, (err, pedidoId) => {
+// Obtener o crear pedido activo para un usuario
+app.get('/api/pedido-activo/:usuarioId', (req, res) => {
+  const usuarioId = req.params.usuarioId;
+  
+  // Primero buscamos si el usuario tiene un pedido sin finalizar
+  const query = `
+    SELECT ID 
+    FROM pedido 
+    WHERE Usuario_ID = ? 
+    LIMIT 1
+  `;
+  
+  db.query(query, [usuarioId], (err, resultados) => {
     if (err) {
-      console.error('Error en crearPedido:', err);
-      return res.status(500).send({ 
-        message: 'Error al crear pedido', 
-        error: err.message,
-        sqlError: err.sqlMessage 
+      return res.status(500).json({ 
+        success: false,
+        message: 'Error al buscar pedido activo',
+        error: err.message
       });
     }
-    console.log('Pedido creado con ID:', pedidoId);
-    res.json({ pedidoId });
+    
+    if (resultados.length > 0) {
+      // Si existe un pedido activo, lo retornamos
+      return res.json(resultados[0]);
+    }
+    
+    // Si no existe, creamos uno nuevo
+    const insertQuery = 'INSERT INTO pedido (Usuario_ID, Fecha_Creacion) VALUES (?, NOW())';
+    
+    db.query(insertQuery, [usuarioId], (err, result) => {
+      if (err) {
+        return res.status(500).json({ 
+          success: false,
+          message: 'Error al crear nuevo pedido',
+          error: err.message
+        });
+      }
+      
+      res.json({ ID: result.insertId });
+    });
   });
 });
 
-// Agregar después del endpoint /api/crear-pedido
+
+// Endpoint modificado para agregar detalles del pedido
 app.post('/api/agregar-detalles-pedido', (req, res) => {
   console.log('Datos recibidos para detalles:', req.body);
   
@@ -69,14 +200,17 @@ app.post('/api/agregar-detalles-pedido', (req, res) => {
 
   // Validar estructura de cada detalle
   const detallesValidos = req.body.every(detalle => 
-    detalle.cantidad && detalle.pedido_id && detalle.producto_id
+    detalle.cantidad && 
+    detalle.pedido_id && 
+    detalle.producto_id &&
+    detalle.talla_producto_id !== undefined
   );
   
   if (!detallesValidos) {
     return res.status(400).json({
       success: false,
       message: 'Estructura de detalles incorrecta',
-      required: ['cantidad', 'pedido_id', 'producto_id']
+      required: ['cantidad', 'pedido_id', 'producto_id', 'talla_producto_id']
     });
   }
 
@@ -92,7 +226,8 @@ app.post('/api/agregar-detalles-pedido', (req, res) => {
     
     console.log('Detalles agregados correctamente:', result);
     res.json({ 
-      success: true
+      success: true,
+      message: 'Producto agregado al carrito exitosamente'
     });
   });
 });
@@ -307,6 +442,183 @@ app.put('/api/actualizar-stock', (req, res) => {
     });
   });
 });
+
+// Obtener carrito de usuario
+app.get('/api/obtener-carrito/:usuarioId', (req, res) => {
+  const usuarioId = req.params.usuarioId;
+  
+  obtenerCarrito.obtenerCarritoUsuario(usuarioId, (err, resultado) => {
+    if (err) {
+      console.error('Error completo:', err);
+      return res.status(500).json({ 
+        success: false,
+        message: 'Error al obtener carrito',
+        error: err.message || 'Error desconocido'
+      });
+    }
+    
+    if (!resultado) {
+      return res.status(404).json({
+        success: false,
+        message: 'No se encontró el carrito'
+      });
+    }
+    
+    res.json(resultado);
+  });
+});
+
+// Actualizar cantidad de un producto en el carrito
+app.put('/api/actualizar-cantidad/:detalleId', (req, res) => {
+  const detalleId = req.params.detalleId;
+  const { cantidad } = req.body;
+  
+  // Validaciones mejoradas
+  if (!cantidad || isNaN(cantidad) || cantidad < 1) {
+    return res.status(400).json({
+      success: false,
+      message: 'La cantidad debe ser un número mayor que 0'
+    });
+  }
+
+  // Consulta optimizada para evitar el error MySQL
+  const query = `
+    UPDATE detalles_pedido dp
+    JOIN productos p ON p.ID = dp.Producto_ID
+    SET dp.Cantidad = ?,
+        dp.Precio = p.Precio * ?
+    WHERE dp.ID = ?
+  `;
+  
+  db.query(query, [cantidad, cantidad, detalleId], (err, result) => {
+    if (err) {
+      console.error('Error en la consulta SQL:', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Error al actualizar cantidad en la base de datos',
+        error: err.message,
+        sqlError: err.code
+      });
+    }
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No se encontró el detalle del pedido con el ID proporcionado'
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Cantidad actualizada correctamente',
+      affectedRows: result.affectedRows
+    });
+  });
+});
+
+// Eliminar producto del carrito
+app.delete('/api/eliminar-producto/:detalleId', (req, res) => {
+  const detalleId = req.params.detalleId;
+  
+  const query = 'DELETE FROM detalles_pedido WHERE ID = ?';
+  
+  db.query(query, [detalleId], (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: 'Error al eliminar producto',
+        error: err.message
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Producto eliminado del carrito'
+    });
+  });
+});
+
+// En server.js, con los otros endpoints
+app.delete('/api/limpiar-carrito/:pedidoId', (req, res) => {
+  const pedidoId = req.params.pedidoId;
+  
+  // Primero obtenemos todos los detalles del pedido
+  const getDetailsQuery = `
+    SELECT Talla_Producto_ID, Cantidad 
+    FROM detalles_pedido 
+    WHERE Pedido_ID = ?
+  `;
+  
+  db.query(getDetailsQuery, [pedidoId], (err, detalles) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: 'Error al obtener detalles del pedido',
+        error: err.message
+      });
+    }
+    
+    // Si no hay productos en el carrito, retornar éxito
+    if (detalles.length === 0) {
+      return res.json({
+        success: true,
+        message: 'Carrito ya estaba vacío',
+        affectedRows: 0
+      });
+    }
+    
+    // Procesar cada detalle para actualizar el stock
+    const updatePromises = detalles.map(detalle => {
+      return new Promise((resolve, reject) => {
+        const updateQuery = `
+          UPDATE talla_producto 
+          SET Cantidad = Cantidad - ? 
+          WHERE ID = ?
+        `;
+        
+        db.query(updateQuery, [detalle.Cantidad, detalle.Talla_Producto_ID], (err, result) => {
+          if (err) {
+            console.error(`Error al actualizar talla_producto ID ${detalle.Talla_Producto_ID}:`, err);
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+    });
+    
+    // Ejecutar todas las actualizaciones de stock
+    Promise.all(updatePromises)
+      .then(() => {
+        // Una vez actualizados todos los stocks, eliminar los detalles del pedido
+        const deleteQuery = 'DELETE FROM detalles_pedido WHERE Pedido_ID = ?';
+        
+        db.query(deleteQuery, [pedidoId], (err, result) => {
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              message: 'Error al limpiar el carrito después de actualizar stocks',
+              error: err.message
+            });
+          }
+          
+          res.json({
+            success: true,
+            message: 'Carrito limpiado correctamente y stocks actualizados',
+            affectedRows: result.affectedRows
+          });
+        });
+      })
+      .catch(error => {
+        return res.status(500).json({
+          success: false,
+          message: 'Error al actualizar uno o más stocks de productos',
+          error: error.message
+        });
+      });
+  });
+});
+
 
 // Iniciar el servidor Express
 app.listen(port, () => {

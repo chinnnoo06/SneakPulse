@@ -2,17 +2,23 @@
   <header class="header-main">
     <div class="contenido-header">
       <div class="logo">
-        <h1><a href="/">
-          Sneakers<span class="txt-red">Pulse</span>
-        </a></h1>
+        <h1>
+          <a routerLink="/"> <!-- Cambiado de href a routerLink -->
+            Sneakers<span class="txt-red">Pulse</span>
+          </a>
+        </h1>
         <p class="tagline">Administración</p>
       </div>
       <nav class="nav">
-        <a href="/inicio-admin" class="nav-link active">
+        <a routerLink="/inicio-admin" 
+           class="nav-link" 
+           [class.active]="isActive('/inicio-admin')">
           <i class="fas fa-box-open"></i> Inventario
         </a>
-        <a href="/pedidos-admin" class="nav-link">
-          <i class="fas fa-clipboard-check"></i> Pedidos
+        <a routerLink="/perfil-admin" 
+           class="nav-link" 
+           [class.active]="isActive('/perfil-admin')">
+          <i class="fa-solid fa-user"></i> Mi perfil
         </a>
       </nav>
     </div>

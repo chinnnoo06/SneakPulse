@@ -76,6 +76,22 @@
   color: #b03a3a;
 }
 
+/* Estilo para el punto rojo del carrito */
+.cart-badge {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #a54242;
+  border-radius: 50%;
+  position: relative;
+  top: -5px;
+}
+
+/* Asegurar que el icono de carrito tenga posición relativa para el badge */
+.nav-link i.fa-cart-shopping {
+  position: relative;
+}
+
 /* Estilos del Footer */
 .contenedor-footer {
   width: 100%;

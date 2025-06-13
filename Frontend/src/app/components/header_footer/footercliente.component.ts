@@ -3,16 +3,12 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-header-admin',
+  selector: 'app-footer-cliente',
   standalone: true,
   imports: [RouterModule, CommonModule],
-  templateUrl: './headeradmin.component.html',
+  templateUrl: './footercliente.component.html',
   styleUrls: ['./headerfooter.component.css']
 })
-export class HeaderAdminComponent {
+export class FooterClientComponent {
   constructor(private router: Router) {}
-
-  isActive(route: string): boolean {
-    return this.router.url === route;
-  }
 }

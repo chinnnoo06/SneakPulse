@@ -3,6 +3,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { HeaderAdminComponent } from './components/header_footer/headeradmin.component';
 import { FooterAdminComponent } from './components/header_footer/footeradmin.component';
+import { HeaderClientComponent } from './components/header_footer/headercliente.component';
+import { FooterClientComponent } from './components/header_footer//footercliente.component';
 import { RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
 
@@ -12,6 +14,8 @@ import { NgIf } from '@angular/common';
   imports: [
     HeaderAdminComponent,
     FooterAdminComponent,
+    HeaderClientComponent,
+    FooterClientComponent,
     RouterModule,
     NgIf
   ],
@@ -20,6 +24,7 @@ import { NgIf } from '@angular/common';
 })
 export class AppComponent implements OnInit {
   mostrarHeaderFooterAdmin = false;
+  mostrarHeaderFooterCliente = false;
 
   constructor(private router: Router) {}
 
@@ -27,9 +32,18 @@ export class AppComponent implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
+      const url = event.urlAfterRedirects || event.url;
+      
       this.mostrarHeaderFooterAdmin = 
-        event.urlAfterRedirects.startsWith('/inicio-admin') || 
-        event.urlAfterRedirects.startsWith('/detallesproducto-admin/');
+        url.startsWith('/inicio-admin') || 
+        url.startsWith('/detallesproducto-admin/')|| 
+        url.startsWith('/perfil-admin');
+      
+      this.mostrarHeaderFooterCliente = 
+        url.startsWith('/inicio-cliente') || 
+        url.startsWith('/detallesproducto-cliente/')  || 
+        url.startsWith('/carrito-cliente') || 
+        url.startsWith('/perfil-cliente');
     });
   }
 }

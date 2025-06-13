@@ -1,0 +1,32 @@
+<div class="contenedor-header">
+  <header class="header-main">
+    <div class="contenido-header">
+      <div class="logo">
+        <h1>
+          <a routerLink="/">
+            Sneakers<span class="txt-red">Pulse</span>
+          </a>
+        </h1>
+        <p class="tagline">Ecommerce</p>
+      </div>
+      <nav class="nav">
+        <a routerLink="/inicio-cliente" 
+           class="nav-link" 
+           [class.active]="isActive('/inicio-cliente')">
+          <i class="fas fa-box-open"></i> Catalogo
+        </a>
+        <a routerLink="/carrito-cliente" 
+           class="nav-link" 
+           [class.active]="isActive('/carrito-cliente')">
+          <i class="fa-solid fa-cart-shopping"></i> Carrito
+          <span *ngIf="tieneCarrito" class="cart-badge"></span>
+        </a>
+        <a routerLink="/perfil-cliente" 
+           class="nav-link" 
+           [class.active]="isActive('/perfil-cliente')">
+          <i class="fa-solid fa-user"></i> Mi perfil
+        </a>
+      </nav>
+    </div>
+  </header>
+</div>

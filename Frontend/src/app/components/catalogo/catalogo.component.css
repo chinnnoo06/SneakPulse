@@ -1,0 +1,107 @@
+/* Estilos generales */
+body {
+  background-color: #f8f9fa;
+}
+
+.contenedor{
+    max-width: 1200px;
+    min-height: 800px;
+}
+
+
+.search-bar .form-control:focus {
+  box-shadow: none;
+  border-color: #a54242;
+}
+
+/* Tarjetas de producto */
+.product-card {
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+
+  flex-grow: 1;
+}
+
+/* Asegura que el contenido superior ocupe el espacio disponible */
+.card-body > div:first-child {
+  flex-grow: 1;
+}
+
+/* Botón siempre al final */
+.btn-tipouno {
+  margin-top: auto;
+}
+
+/* Altura fija para la imagen */
+.product-card img {
+  object-fit: contain;
+  height: 300px;
+  width: 100%;
+  transition: transform 0.3s ease;
+}
+
+/* Botones */
+.btn-tipouno {
+  background-color: #202123;
+  color: white;
+  font-weight: 600;
+  width: 180px;
+  box-shadow: 0 4px 14px rgb(32 33 35 / 0.35);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+  transform 0.2s ease;
+}
+
+.btn-tipouno:hover {
+  background-color: #a54242;
+  color: white;
+  box-shadow: 0 6px 22px rgb(165 66 66 / 0.6);
+}
+
+.btn-search {
+  background-color: #202123;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgb(32 33 35 / 0.35);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+  transform 0.2s ease;
+}
+
+.btn-search:hover {
+  background-color: #a54242;
+  color: white;
+  box-shadow: 0 6px 22px rgb(165 66 66 / 0.6);
+
+}
+
+/* Estilos para el mensaje de no resultados */
+.alert-info {
+  background-color: #f8f9fa;
+  border-color: #e0e0e0;
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-card {
+    margin-bottom: 20px;
+  }
+  
+  .search-bar {
+    margin-top: 10px;
+  }
+}

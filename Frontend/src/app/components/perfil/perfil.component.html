@@ -1,0 +1,108 @@
+<div class="container perfil-container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header titulo">
+            <h2 class="mb-0 fw-semibold text-dark">
+                Mi Perfil
+            </h2>
+        </div>
+        
+        <div class="card-body">
+          <!-- Spinner de carga -->
+          <div *ngIf="cargando" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2">Cargando datos del perfil...</p>
+          </div>
+          
+          <!-- Mensajes de éxito/error -->
+          <div *ngIf="mensajeExito" class="alert alert-success">{{ mensajeExito }}</div>
+          <div *ngIf="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
+          
+          <!-- Formulario -->
+          <form *ngIf="!cargando && usuario.Nombre !== undefined" (ngSubmit)="guardarCambios()">
+            <!-- Nombre y Apellido -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" 
+                       [(ngModel)]="usuario.Nombre" 
+                       name="nombre" 
+                       [disabled]="!modoEdicion"
+                       required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Apellido</label>
+                <input type="text" class="form-control" 
+                       [(ngModel)]="usuario.Apellido" 
+                       name="apellido" 
+                       [disabled]="!modoEdicion"
+                       required>
+              </div>
+            </div>
+            
+            <!-- Email -->
+            <div class="mb-3">
+              <label class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" 
+                     [(ngModel)]="usuario.Email" 
+                     name="email" 
+                     disabled>
+            </div>
+            
+            <!-- Dirección -->
+            <div class="mb-3">
+              <label class="form-label">Dirección</label>
+              <textarea class="form-control" 
+                        [(ngModel)]="usuario.Direccion" 
+                        name="direccion" 
+                        [disabled]="!modoEdicion" 
+                        rows="2"></textarea>
+            </div>
+            
+            <!-- Pregunta de Seguridad -->
+            <div class="mb-3">
+              <label class="form-label">Pregunta de Seguridad</label>
+              <select class="form-select" 
+                      [(ngModel)]="usuario.Pregunta_Seguridad" 
+                      name="preguntaSeguridad" 
+                      [disabled]="!modoEdicion"
+                      required>
+                <option value="">Seleccione una pregunta</option>
+                <option value="¿Cuál es el nombre de tu mascota favorita?">¿Cuál es el nombre de tu mascota favorita?</option>
+                <option value="¿En qué ciudad naciste?">¿En qué ciudad naciste?</option>
+                <option value="¿Cuál es tu comida favorita?">¿Cuál es tu comida favorita?</option>
+                <option value="¿Cuál es tu película favorita de la infancia?">¿Cuál es tu película favorita de la infancia?</option>
+              </select>
+            </div>
+            
+            <!-- Respuesta de Seguridad -->
+            <div class="mb-3">
+              <label class="form-label">Respuesta de Seguridad</label>
+              <input type="text" class="form-control" 
+                     [(ngModel)]="usuario.Respuesta_Seguridad" 
+                     name="respuestaSeguridad" 
+                     [disabled]="!modoEdicion"
+                     required>
+            </div>
+            
+            <!-- Botones -->
+            <div class="d-flex justify-content-between mt-4">              
+              <div *ngIf="!modoEdicion">
+                <button type="button" class="btn btn-tipouno btn-sm" (click)="toggleEdicion()">Editar Perfil</button>
+                <button type="button" class="btn btn-tipodos btn-sm ms-2" (click)="cerrarSesion()">Cerrar Sesión</button>
+              </div>
+              
+              <div *ngIf="modoEdicion">
+                <button type="button" class="btn btn-tipouno btn-sm me-2" (click)="toggleEdicion()">Cancelar</button>
+                <button type="submit" class="btn btn-tipodos btn-sm">Guardar Cambios</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,89 @@
+<div class="contenedor py-4">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 py-3">
+      <h2 class="mb-0 fw-semibold text-dark">Detalles del Producto</h2>
+    </div>
+    
+    <div class="card-body" *ngIf="producto">
+      <!-- Sección de información del producto -->
+      <div class="product-display">
+        <div class="product-image-wrapper">
+          <img [src]="producto.Imagen_URL" 
+               alt="{{producto.Nombre}}" 
+               class="product-image">
+        </div>
+        
+        <div class="product-details">
+          <div class="detail-item">
+            <h3 class="detail-label">Nombre</h3>
+            <p class="detail-value">{{producto.Nombre}}</p>
+          </div>
+          
+          <div class="detail-item">
+            <h3 class="detail-label">Precio</h3>
+            <p class="detail-value price">${{producto.Precio | number:'1.2-2'}}</p>
+          </div>
+          
+          <div class="detail-item">
+            <h3 class="detail-label">Color</h3>
+            <div class="color-display">
+              <span class="color-value">{{producto.Color}}</span>
+            </div>
+          </div>
+
+          <!-- Sección de tallas -->
+          <div class="detail-item">
+            <h3 class="detail-label">Tallas disponibles</h3>
+            <div class="tallas-container">
+              <button 
+                *ngFor="let talla of tallas"
+                [disabled]="talla.Cantidad <= 0"
+                [class.selected]="tallaSeleccionada?.ID === talla.ID"
+                (click)="seleccionarTalla(talla)"
+                class="talla-btn">
+                {{talla.Nombre}}
+              </button>
+            </div>
+            <p class="error-message" *ngIf="!tallaSeleccionada && intentoAgregar">
+              Por favor selecciona una talla
+            </p>
+          </div>
+
+          <!-- Selector de cantidad -->
+          <div class="detail-item" *ngIf="tallaSeleccionada">
+            <h3 class="detail-label">Cantidad</h3>
+            <div class="cantidad-selector">
+              <button 
+                (click)="decrementarCantidad()" 
+                [disabled]="cantidad <= 1"
+                class="btn-cantidad">
+                -
+              </button>
+              <span class="cantidad-value">{{cantidad}}</span>
+              <button 
+                (click)="incrementarCantidad()" 
+                [disabled]="cantidad >= tallaSeleccionada.Cantidad"
+                class="btn-cantidad">
+                +
+              </button>
+              <span class="max-cantidad">
+                Máximo: {{tallaSeleccionada.Cantidad}}
+              </span>
+            </div>
+          </div>
+
+          <!-- Botón de agregar al carrito -->
+          <div class="detail-item">
+            <button 
+            (click)="agregarAlCarrito()"
+            [disabled]="!tallaSeleccionada || agregandoAlCarrito"
+            class="btn-tipodos btn">
+            <span *ngIf="!agregandoAlCarrito">Agregar al carrito</span>
+            <span *ngIf="agregandoAlCarrito">Procesando...</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="container py-5">
+  <div class="card shadow-sm contenedor-carrito">
+    <div class="card-header bg-white py-3">
+      <h2 class="mb-0 fw-semibold text-dark">
+        Mi Carrito
+      </h2>
+    </div>
+
+    <div class="card-body ">
+      <!-- Mensajes de carga/error -->
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3">Cargando tu carrito...</p>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <!-- Carrito vacío -->
+      <div *ngIf="!loading && !error && productos.length === 0" class="text-center py-5">
+        <i class="bi bi-cart-x text-muted" style="font-size: 3rem;"></i>
+        <h4 class="mt-3">Tu carrito está vacío</h4>
+        <p class="text-muted">Agrega productos para continuar</p>
+        <a routerLink="/inicio-cliente" class="btn btn-tipodos mt-3">
+          Ver productos
+        </a>
+      </div>
+
+      <!-- Lista de productos -->
+      <div *ngIf="!loading && productos.length > 0">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Talla</th>
+                <th scope="col">Precio Unitario</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Total</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let producto of productos">
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img [src]="producto.imagen_url" 
+                         alt="{{producto.nombre}}" 
+                         class="img-thumbnail me-3" 
+                         style="width: 80px; height: 80px; object-fit: cover;">
+                    <div>
+                      <h6 class="mb-0">{{producto.nombre}}</h6>
+                    </div>
+                  </div>
+                </td>
+                <td class="align-middle">{{producto.talla_nombre}}</td>
+                <td class="align-middle">${{ producto.precio_unitario | number:'1.2-2' }}</td>
+                <td class="align-middle">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-sm btn-tipouno" 
+                            type="button" 
+                            (click)="actualizarCantidad(producto, producto.cantidad - 1)"
+                            [disabled]="producto.cantidad <= 1">
+                    <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <input type="number" 
+                        class="form-control cantidad-input text-center mx-2" 
+                        [(ngModel)]="producto.cantidad" 
+                        (change)="actualizarCantidad(producto, producto.cantidad)"
+                        min="1"
+                        style="max-width: 60px;">
+                    <button class="btn btn-sm btn-tipodos" 
+                            type="button" 
+                            (click)="actualizarCantidad(producto, producto.cantidad + 1)">
+                    <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+                </td>
+                <td class="align-middle">${{ producto.precio_total | number:'1.2-2' }}</td>
+                <td class="align-middle">
+                  <button class="btn btn-sm btn-outline-danger" 
+                          (click)="eliminarProducto(producto.id)">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-md-5 offset-md-7">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">Resumen del pedido</h5>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Subtotal:</span>
+                  <span>${{ parseDecimal(totalCarrito) | number:'1.2-2' }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                  <span>Envío:</span>
+                  <span>Calculado al finalizar</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between fw-bold mb-4">
+                  <span>Total:</span>
+                  <span>${{ parseDecimal(totalCarrito) | number:'1.2-2' }}</span>
+                </div>
+                <div #paypalButtonContainer *ngIf="totalCarrito > 0" class="paypal-button"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

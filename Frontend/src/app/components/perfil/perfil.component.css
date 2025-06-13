@@ -1,0 +1,113 @@
+.perfil-container {
+  min-height: 80vh;
+}
+
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+}
+
+.card-header h2 {
+  font-weight: 600;
+  color: #495057;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: block;
+  font-size: 1rem;
+  color: #333;
+  letter-spacing: 0.02em;
+}
+
+/* Estilos para campos deshabilitados */
+input[type='text']:disabled,
+input[type='email']:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: #f5f5f5;
+  border-color: #e0e0e0;
+  color: #616161;
+  cursor: not-allowed;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Estilos para campos habilitados */
+input[type='text'],
+input[type='email'],
+textarea,
+select {
+  width: 100%;
+  padding: 8px 7px;
+  font-size: 0.9rem;
+  border: 1.6px solid #ccc;
+  border-radius: 10px;
+  transition: all 0.35s ease;
+  outline: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  background-color: white;
+}
+
+input[type='text']:focus,
+input[type='email']:focus,
+textarea:focus,
+select:focus {
+  border-color: #a54242;
+  box-shadow: 0 0 12px rgba(165, 66, 66, 0.45);
+}
+
+textarea.form-control {
+  resize: none;
+}
+
+/* Estilos para los botones */
+.btn-tipouno {
+  background-color: #202123;
+  color: white;
+  font-weight: 600;
+  width: 180px;
+  box-shadow: 0 4px 14px rgba(32, 33, 35, 0.35);
+  transition: all 0.3s ease;
+}
+
+.btn-tipouno:hover:not(:disabled) {
+  background-color: #a54242;
+  color: white;
+  box-shadow: 0 6px 22px rgba(165, 66, 66, 0.6);
+  transform: scale(1.03);
+}
+
+.btn-tipodos {
+  background-color: #a54242;
+  color: white;
+  font-weight: 600;
+  width: 180px;
+  box-shadow: 0 3px 12px rgba(165, 66, 66, 0.45);
+  transition: all 0.3s ease;
+}
+
+.btn-tipodos:hover {
+  background-color: #202123;
+  color: white;
+  box-shadow: 0 5px 18px rgba(32, 33, 35, 0.55);
+  transform: scale(1.05);
+}
+
+/* Estilo para el botón de guardar */
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+/* Estilo para el botón cancelar */
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+}
